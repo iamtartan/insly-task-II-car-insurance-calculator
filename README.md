@@ -1,5 +1,7 @@
 # insly-task-II-car-insurance-calculator
 
+### Screenshot
+
 ![Screenshot](/screenshot.png?raw=true "Screenshot")
 
 ### Installing
