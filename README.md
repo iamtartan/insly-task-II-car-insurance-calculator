@@ -1,5 +1,7 @@
 # insly-task-II-car-insurance-calculator
 
+![Screenshot](/screenshot.png?raw=true "Screenshot")
+
 ### Installing
 
 For running <b>basic</b> branch just copy <b>config-sample.php</b> file to <b>config.php</b> and run index.php file in public folder.
@@ -43,6 +45,3 @@ return [
 - I haven't used php <b>composer</b>, <b>DI</b> or any other modern concepts in <b>basic</b> branch.
 - Modern concepts and structures are used just in the <b>modern</b> branch.
 - Basic branch does not contain <b>phpunit</b> test.
-
-
-![Screenshot](/screenshot.png?raw=true "Screenshot")
