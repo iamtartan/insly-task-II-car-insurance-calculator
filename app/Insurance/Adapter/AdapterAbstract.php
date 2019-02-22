@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Model;
+namespace App\Insurance\Adapter;
 
-use Exception;
-use DateTime;
 /**
- * Car insurance installments calculator
+ * Abstract class for all insurance companies
  *
- * Class InsuranceCalculator
+ * Interface AdapterAbstract
+ * @package App\Insurance\Adapter
  */
-
-class InsuranceCalculator
+abstract class AdapterAbstract
 {
     /**
      * Estimated value of the car (100 - 100 000 EUR)
@@ -63,11 +61,12 @@ class InsuranceCalculator
         $this->basePriceException  = $basePriceException;
     }
 
+
     /**
      * set estimated value of the car
      * @param int $value
      *
-     * @return InsuranceCalculator
+     * @return AdapterAbstract
      */
     public function setCarValue(int $value): self
     {
@@ -80,7 +79,7 @@ class InsuranceCalculator
      * set the tax percentage for calculation
      * @param float $percentage
      *
-     * @return InsuranceCalculator
+     * @return AdapterAbstract
      */
     public function setTaxPercentage(float $percentage): self
     {
@@ -93,88 +92,13 @@ class InsuranceCalculator
      * Set number of installments
      * @param int $count
      *
-     * @return InsuranceCalculator
+     * @return AdapterAbstract
      */
     public function setInstallments(int $count): self
     {
         $this->installments = $count;
 
         return $this;
-    }
-
-    /**
-     * return the total policy calculation
-     *
-     * @return array
-     */
-    public function getPolicyCalculation(): array
-    {
-        $basePremium = round($this->getBasePrice(), 2);
-        $commission  = round($this->commissionPercent / 100 * $basePremium, 2);
-        $tax         = round($this->taxPercentage / 100 * $basePremium, 2);
-
-        return [
-            'basePremium' => $basePremium,
-            'commission'  => $commission,
-            'tax'         => $tax,
-            'total'       => $basePremium + $commission + $tax,
-        ];
-    }
-
-    /**
-     * returns the base price based on defined exceptions
-     *
-     * @return float
-     */
-    protected function getBasePrice(): float
-    {
-        $currentTime = new DateTime('now');
-        $dayOfTheWeek = strtolower($currentTime->format('l'));
-
-        $percent = $this->basePricePercentage;
-
-        if (!empty($this->basePriceException)) {
-            foreach ($this->basePriceException as $rule) {
-                $startTime = DateTime::createFromFormat('H:i', $rule['startHour']);
-                $endTime = DateTime::createFromFormat('H:i', $rule['endHour']);
-
-                if ($dayOfTheWeek == $rule['day'] && ($currentTime >= $startTime && $currentTime <= $endTime)) {
-                    $percent = $rule['percentage'];
-                    break;
-                }
-            }
-        }
-
-        $this->basePricePercentage = $percent;
-
-        return round($percent / 100 * $this->carValue, 2);
-    }
-
-    /**
-     * returns the array of all installments
-     *
-     * @return array
-     * @throws Exception
-     */
-    public function getInstallmentsArray(): array
-    {
-        if (empty($this->installments)) {
-            throw new Exception('Invalid installments! Please set the number of installments first.');
-        }
-
-        $totalPolicy = $this->getPolicyCalculation();
-
-        $installments = [];
-
-        foreach ($totalPolicy as $key => $value) {
-            $installments [$key][0] = $value;
-            $parts                  = $this->getExactDivisions($value, $this->installments);
-            foreach ($parts as $installmentNo => $installmentVal) {
-                $installments [$key][$installmentNo] = $installmentVal;
-            }
-        }
-
-        return $installments;
     }
 
     /**
@@ -205,7 +129,7 @@ class InsuranceCalculator
      * @param string $tableClass
      *
      * @return string
-     * @throws Exception
+     * @throws \App\Insurance\Exception
      */
     public function renderInstallmentTable(
         string $tableId = 'insurance_installments_table',
@@ -233,5 +157,4 @@ class InsuranceCalculator
 
         return $html;
     }
-
 }

@@ -54,6 +54,15 @@
                 <fieldset>
 
                   <div class="form-group">
+                    <label for="company">Insurance Company</label>
+                    <select id="company" name="company" class="form-control form-control-lg">
+                        <?php foreach($insuranceCompanies as $company => $label):?>
+                            <option value="<?php echo $company?>"><?php echo $label?></option>
+                        <?php endforeach;?>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
                     <label class="control-label" for="car_value">Estimated Car value (in Euro)</label>
                     <div class="form-group">
                       <div class="input-group mb-3">
@@ -79,8 +88,8 @@
 
 
                   <div class="form-group">
-                    <label for="exampleSelect1">Number of installment</label>
-                    <select id="installments" name="installments" class="form-control form-control-lg" id="exampleSelect1">
+                    <label for="installments">Number of installment</label>
+                    <select id="installments" name="installments" class="form-control form-control-lg">
                         <?php for($i=1; $i<=$maxInstallments; $i++):?>
                             <option value="<?php echo $i?>"><?php echo $i?></option>
                         <?php endfor;?>

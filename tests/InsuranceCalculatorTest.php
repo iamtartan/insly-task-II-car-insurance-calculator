@@ -2,28 +2,73 @@
 declare(strict_types = 1);
 
 use PHPUnit\Framework\TestCase;
-use App\Model\InsuranceCalculator;
+use App\Insurance\Factory;
 
 final class InsuranceCalculatorTest extends TestCase
 {
-    protected $calculator;
+    protected static $config;
 
-    public function __construct()
+    protected static $calculator;
+
+    protected function setUp(): void
     {
-        parent::__construct();
-        $this->calculator = new InsuranceCalculator(
-            11,
-            17,
-            [
-                [
-                    'day'        => 'friday',
-                    'startHour'  => '15:00',
-                    'endHour'    => '20:00',
-                    'percentage' => '13',
+        self::$config = [
+            // base policy price in percent
+            'basePricePercent'   => 11,
+
+            // maximum of installments
+            'maxInstallments'    => 12,
+
+            // active insurance companies for this app
+            'activeCompanies'    => [
+                'Company1 (default)',
+                'Company2',
+            ],
+
+            // supporting multiple rule definition
+            'basePriceException' => [
+                'company1' => [
+                    // exception rule number 1
+                    [
+                        'day'        => 'friday',
+                        'startHour'  => '15:00',
+                        'endHour'    => '20:00',
+                        'percentage' => 13,
+                    ],
                 ],
-            ]
-        );
+
+                'company2' => [
+                    // exception rule number 1
+                    [
+                        'borderPrice'      => 25000, // in dollar
+                        'lowerPercentage'  => 12,
+                        'higherPercentage' => 14,
+                    ],
+                ],
+
+                'company3' => [
+                    // exception rule number 1
+                    [
+                        'days'              => 'friday,saturday,sunday',
+                        'defaultPercentage' => 11,
+                        'percentage'        => 13,
+                    ],
+                ],
+            ],
+
+            // our commission in percent
+            'commissionPercent'  => 17,
+        ];
+
+        self::$calculator = Factory::make('company1', self::$config);
+
     }
+
+    public function testInsuranceAdapterInstance(): void
+    {
+        $this->assertInstanceOf('\App\Insurance\Adapter\AdapterInterface', self::$calculator);
+    }
+
 
     public function testTotalPolicyCalculation(): void
     {
@@ -33,7 +78,7 @@ final class InsuranceCalculatorTest extends TestCase
         $endTime      = DateTime::createFromFormat('H:i', '20:00');
 
 
-        $policy = $this->calculator->setCarValue(10000)
+        $policy = self::$calculator->setCarValue(10000)
             ->setInstallments(2)
             ->setTaxPercentage(10)
             ->getPolicyCalculation();
@@ -54,7 +99,7 @@ final class InsuranceCalculatorTest extends TestCase
 
     public function testEqualInstallmentsCalculation(): void
     {
-        $installments = $this->calculator->setCarValue(10000)
+        $installments = self::$calculator->setCarValue(10000)
             ->setInstallments(2)
             ->setTaxPercentage(10)
             ->getInstallmentsArray();
@@ -68,7 +113,7 @@ final class InsuranceCalculatorTest extends TestCase
 
     public function testUnEqualInstallmentsCalculation(): void
     {
-        $installments = $this->calculator->setCarValue(10000)
+        $installments = self::$calculator->setCarValue(10000)
             ->setInstallments(3)
             ->setTaxPercentage(10)
             ->getInstallmentsArray();
@@ -82,9 +127,9 @@ final class InsuranceCalculatorTest extends TestCase
 
     public function testThrowingExceptionOnEmptyInstallmentsValue(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(\App\Insurance\Exception::class);
 
-        $calculator = $this->calculator->setCarValue(10000)
+        $calculator = self::$calculator->setCarValue(10000)
             //->setInstallments(3) installments not set
             ->setTaxPercentage(10)
             ->getInstallmentsArray();

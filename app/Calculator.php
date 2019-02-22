@@ -1,8 +1,9 @@
 <?php
-declare(strict_types = 1);
+// declare(strict_types = 1);
 
 namespace App;
 
+use App\Insurance\Factory;
 use Psr\Http\Message\ResponseInterface;
 use Exception;
 use App\Model\InsuranceCalculator;
@@ -44,6 +45,7 @@ class Calculator
             $carValue     = intval($_POST['car_value']);
             $installments = intval($_POST['installments']);
             $tax          = floatval($_POST['tax']);
+            $company      = strtolower(trim($_POST['company']));
 
             // just for better experience in demo
             sleep(1);
@@ -68,11 +70,7 @@ class Calculator
                 $payload ['code']   = 1;
                 $payload ['errors'] = $errors;
             } else {
-                $calculator = new InsuranceCalculator(
-                    $this->config['basePricePercent'],
-                    $this->config['commissionPercent'],
-                    $this->config['basePriceException']
-                );
+                $calculator = Factory::make($company, $this->config);
 
                 $installmentsTable = $calculator->setCarValue($carValue)
                     ->setInstallments($installments)

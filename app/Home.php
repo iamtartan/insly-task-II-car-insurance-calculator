@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App;
 
@@ -7,8 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  *
- *
- * @package   ExampleApp
+ * @package App
  */
 class Home
 {
@@ -16,8 +15,14 @@ class Home
      * @var array
      */
     private $config;
+
     /**
-     * HelloWorld constructor.
+     * @var ResponseInterface
+     */
+    private $response;
+
+    /**
+     * Home constructor
      *
      * @param ResponseInterface $response
      * @param array $config
@@ -26,14 +31,9 @@ class Home
         array $config,
         ResponseInterface $response
     ) {
-        $this->config = $config;
+        $this->config   = $config;
         $this->response = $response;
     }
-
-    /**
-     * @var ResponseInterface
-     */
-    private $response;
 
     /**
      *
@@ -43,12 +43,16 @@ class Home
      */
     public function __invoke(): ResponseInterface
     {
-        $maxInstallments = $this->config['maxInstallments'];
-        $view = include (dirname(__DIR__) . '/views/index.php');
+        ob_start();
+        $maxInstallments    = $this->config['maxInstallments'];
+        $insuranceCompanies = $this->config['activeCompanies'];
+        $view               = include(dirname(__DIR__) . '/views/index.php');
+        $content = ob_get_contents();
+        ob_end_clean();
 
         $response = $this->response->withHeader('Content-Type', 'text/html');
         $response->getBody()
-            ->write(strval($view));
+            ->write($content);
 
         return $response;
     }

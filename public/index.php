@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 use DI\ContainerBuilder;
 use App\Home;
@@ -25,8 +25,8 @@ $containerBuilder->useAnnotations(false);
 $containerBuilder->addDefinitions([
     Home::class => create(Home::class)
         ->constructor(get('config'), get('Response')),
-    'config' => $config,
-    'Response'  => function() {
+    'config'    => $config,
+    'Response'  => function () {
         return new Response();
     },
 ]);
@@ -34,13 +34,12 @@ $containerBuilder->addDefinitions([
 $containerBuilder->addDefinitions([
     Calculator::class => create(Calculator::class)
         ->constructor(get('config'), get('Response')),
-    'config' => $config,
-    'Response'  => function() {
+    'config'          => $config,
+    'Response'        => function () {
         return new Response();
     },
 ]);
 
-/** @noinspection PhpUnhandledExceptionInspection */
 $container = $containerBuilder->build();
 
 $routes = simpleDispatcher(function (RouteCollector $r) {
@@ -51,10 +50,8 @@ $routes = simpleDispatcher(function (RouteCollector $r) {
 $middlewareQueue[] = new FastRoute($routes);
 $middlewareQueue[] = new RequestHandler($container);
 
-/** @noinspection PhpUnhandledExceptionInspection */
 $requestHandler = new Relay($middlewareQueue);
-$response = $requestHandler->handle(ServerRequestFactory::fromGlobals());
-
+$response       = $requestHandler->handle(ServerRequestFactory::fromGlobals());
 $emitter = new SapiEmitter();
-/** @noinspection PhpVoidFunctionResultUsedInspection */
+
 return $emitter->emit($response);
