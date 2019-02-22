@@ -6,7 +6,9 @@
 
 ### Installing
 
-For running <b>basic (master)</b> branch just copy <b>config-sample.php</b> file to <b>config.php</b> and run index.php file in public folder.
+For running **basic** branch just copy **config-sample.php** file to **config.php** and goto index.php file in /public folder.
+
+For running **modern** branch you can user php built in web server and goto / folder.
 
 ```php
 <?php
@@ -33,17 +35,28 @@ return [
 ];
 
 ```
+run project in **modern** branch
 
-### Rules
+```bash
+$ cd /your/path/to/project/public 
+$ php -S localhost:8000 
+```
 
-- If the amount is <b>not divisible</b> by installments, the <b>first installment</b> values will be different from other installments.
-- Base price of policy is <b>11%</b> from entered car value, except every Friday 15-20 o’clock (user time) when it is <b>13%</b>. More rules can be added in config file.
-- I've added <b>1 second delay</b> to response time just for better experience in <b>demo</b>.
+### Predefined Rules
+
+- If the amount is **not divisible** by installments, the **First installment** values will be different from other installments.
+- Base price of policy is **11%** from entered car value, except every Friday 15:00-20:: o’clock (user time) when it is **13%**. More rules can be add in project config file.
+- I've added **1 second delay** to response time just for better experience in ajax calls in **demo**.
 
 ### Branch details
 
-- The project developed with <b>vanilla</b> PHP and Javascript without using any framework, template engine or third-party package.
-- This project has been developed in two branches <b>basic (master)</b> and <b>modern</b>.
-- I haven't used php <b>composer</b>, <b>DI</b> or any other modern concepts in <b>basic</b> branch.
-- Modern concepts and structures are used just in the <b>modern</b> branch.
-- Basic branch does not contain <b>phpunit</b> test.
+- The project developed with **vanilla** PHP and Javascript without using any framework, template engine or third-party package.
+- This project has been developed in two branches **basic** and **modern**.
+- I haven't used php **composer**, **DI** or any other modern concepts in **basic** branch.
+- Modern concepts and structures are used just in **modern** branch.
+- **Unit tests** just added in **modern** branch. and you can sun by the following command
+
+```bash
+$ composer install
+$ ./vendor/bin/phpunit --bootstrap vendor/autoload.php tests/InsuranceCalculatorTest
+```
