@@ -54,7 +54,7 @@ $ php -S localhost:8000
 - This project has been developed in two branches **basic** and **modern**.
 - I haven't used php **composer**, **DI** or any other modern concepts in **basic** branch.
 - Modern concepts and structures are used just in **modern** branch.
-- **Unit tests** just added in **modern** branch. and you can sun by the following command
+- **Unit tests** just added in **modern** branch. and you can run by the following command
 
 ```bash
 $ composer install
