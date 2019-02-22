@@ -6,9 +6,10 @@
 
 ### Installing
 
-For running **basic** branch just copy **config-sample.php** file to **config.php** and goto index.php file in /public folder.
 
-For running **modern** branch you can user php built in web server and goto / folder.
+#### run **basic** branch
+
+For running **basic** branch just copy **config-sample.php** file to **config.php** and goto index.php file in /public folder.
 
 ```php
 <?php
@@ -35,7 +36,64 @@ return [
 ];
 
 ```
-run project in **modern** branch
+
+#### run **modern** branch
+
+1. For running **modern** branch just copy **config-sample.php** file to **config.php**
+
+```php
+<?php
+return [
+    // base policy price in percent
+    'basePricePercent'     => 11,
+
+    // maximum of installments
+    'maxInstallments'      => 12,
+
+    // active insurance companies for this app
+    'activeCompanies' => [
+        'company1' => 'Company1 (default company)',
+        'company2' => 'Company2'
+    ],
+
+    // supporting multiple rule definition for multiple insurance companies
+    'basePriceException'   => [
+        // company1: the company that defined in assignment
+        'company1' => [
+            // exception rule number 1
+            [
+                'day'        => 'friday',
+                'startHour'  => '15:00',
+                'endHour'    => '20:00',
+                'percentage' => 13,
+            ],
+        ],
+
+        'company2' => [
+            // exception rule number 1
+            [
+                'borderPrice'      => 25000, // in euro
+                'lowerPercentage'  => 12,
+                'higherPercentage' => 14,
+            ],
+        ],
+
+        'company3' => [
+            // exception rule number 1
+            [
+                'days'              => 'friday,saturday,sunday',
+                'defaultPercentage' => 11,
+                'percentage'        => 13,
+            ],
+        ],
+    ],
+
+    // our commission in percent
+    'commissionPercent'    => 17,
+];
+```
+
+2. run php built in webserver
 
 ```bash
 $ cd /your/path/to/project/public 
@@ -54,9 +112,10 @@ $ php -S localhost:8000
 - This project has been developed in two branches **basic** and **modern**.
 - I haven't used php **composer**, **DI** or any other modern concepts in **basic** branch.
 - Modern concepts and structures are used just in **modern** branch.
+- In branch **modern** multi insurance company implemented. the assigment insurance rules defined as **Company1**. 
 - **Unit tests** just added in **modern** branch. and you can run by the following command
 
 ```bash
 $ composer install
-$ ./vendor/bin/phpunit --bootstrap vendor/autoload.php tests/InsuranceCalculatorTest
+$ ./vendor/bin/phpunit
 ```
