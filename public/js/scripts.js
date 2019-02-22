@@ -12,6 +12,7 @@ function ajaxStarted() {
     ajaxIndicator.classList.remove('d-none')
     btn.innerText='please wait...'
     btn.disabled=true
+    table.innerText=''
 }
 
 function ajaxStopped() {

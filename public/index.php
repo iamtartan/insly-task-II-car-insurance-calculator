@@ -1,3 +1,6 @@
+<?php
+    $config = include __DIR__ . '/../config/config.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +15,7 @@
   <body>
     <div class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
       <div class="container">
-        <a href="https://bootswatch.com/" class="navbar-brand">Insly</a>
+        <a href="/" class="navbar-brand">Insly</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -81,7 +84,7 @@
                   <div class="form-group">
                     <label for="exampleSelect1">Number of installment</label>
                     <select id="installments" name="installments" class="form-control form-control-lg" id="exampleSelect1">
-                        <?php for($i=1; $i<=12; $i++):?>
+                        <?php for($i=1; $i<=$config['maxInstallments']; $i++):?>
                             <option value="<?php echo $i?>"><?php echo $i?></option>
                         <?php endfor;?>
                     </select>
