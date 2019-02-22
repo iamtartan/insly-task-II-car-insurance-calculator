@@ -1,4 +1,9 @@
 <?php
+
+namespace App\Model;
+
+use Exception;
+use DateTime;
 /**
  * Car insurance installments calculator
  *
@@ -51,13 +56,6 @@ class InsuranceCalculator
     protected $commissionPercent;
 
 
-    /**
-     * InsuranceCalculator constructor.
-     *
-     * @param float $basePricePercentage
-     * @param float $commissionPercent
-     * @param array $basePriceException
-     */
     public function __construct(float $basePricePercentage, float $commissionPercent, array $basePriceException = [])
     {
         $this->basePricePercentage = $basePricePercentage;
@@ -108,8 +106,6 @@ class InsuranceCalculator
      * return the total policy calculation
      *
      * @return array
-     *
-     * @throws Exception
      */
     public function getPolicyCalculation(): array
     {
@@ -129,8 +125,6 @@ class InsuranceCalculator
      * returns the base price based on defined exceptions
      *
      * @return float
-     *
-     * @throws Exception
      */
     protected function getBasePrice(): float
     {
@@ -206,8 +200,6 @@ class InsuranceCalculator
 
     /**
      * returns rendered price matrix
-     * you can use this basic render functionality or use your custom rendered just by getting data
-     * by getInstallmentsArray() method
      *
      * @param string $tableId
      * @param string $tableClass

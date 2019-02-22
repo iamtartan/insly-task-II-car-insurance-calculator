@@ -11,8 +11,8 @@ return [
         // exception rule number 1
         [
             'day'       => 'friday',
-            'startHour' => '15:00',
-            'endHour'   => '24:00',
+            'startHour' => 15,
+            'endHour'   => 24,
             'percentage'   => 13
         ]
     ],
