@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Car insurance installments calculator
  *
@@ -37,8 +36,8 @@ class InsuranceCalculator
      * @example
      * [
      *      'day'        => 'friday',
-     *      'startHour'  => 15,
-     *      'endHour'    => 24,
+     *      'startHour'  => '15:00',
+     *      'endHour'    => '24:00',
      *      'percentage' => 13
      * ]
      * @var array
@@ -124,14 +123,17 @@ class InsuranceCalculator
      */
     protected function getBasePrice(): float
     {
-        $today = strtolower(date('l'));
-        $hour  = date('H');
+        $currentTime = new DateTime('now');
+        $dayOfTheWeek = strtolower($currentTime->format('l'));
 
         $percent = $this->basePricePercentage;
 
         if (!empty($this->basePriceException)) {
             foreach ($this->basePriceException as $rule) {
-                if ($today == $rule['day'] && ($hour >= $rule['startHour'] && $hour <= $rule['endHour'])) {
+                $startTime = DateTime::createFromFormat('H:i', $rule['startHour']);
+                $endTime = DateTime::createFromFormat('H:i', $rule['endHour']);
+
+                if ($dayOfTheWeek == $rule['day'] && ($currentTime >= $startTime && $currentTime <= $endTime)) {
                     $percent = $rule['percentage'];
                     break;
                 }
